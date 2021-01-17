@@ -1,10 +1,11 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import { firestore } from "./firebase";
+import firebase from "firebase/app";
 
 function App() {
   const [user, setUser] = useState();
-  //const [dailyEntries, setDailyEntries] = useState();
+  const [dailyEntries, setDailyEntries] = useState();
 
   useEffect(() => {
     const userId = new URLSearchParams(window.location.search).get("user");
@@ -15,6 +16,18 @@ function App() {
       .then((user) => {
         if (user.exists) {
           setUser(user.data());
+          firestore
+            .collection("dailyEntries")
+            .where(
+              firebase.firestore.FieldPath.documentId(),
+              "in",
+              user.data()["dailyEntries"]
+            )
+            .get()
+            .then((entries) => {
+              console.log(entries);
+              setDailyEntries(entries.docs);
+            });
         } else {
           console.log("error");
         }
@@ -37,18 +50,41 @@ function App() {
           <h4>Weight: {user["weight"]} lbs</h4>
         </div>
       </div>
-      <h2>Symptoms</h2>
-      <div className="Symptoms">
-        <div className="Symptoms-info">
-          <h4>Fever</h4>
-          <h4>Cough</h4>
-          <h4>Congestion</h4>
-        </div>
+      <h2>Log</h2>
+      <div className="Log">
+        {dailyEntries != null ? <LogList docs={dailyEntries} /> : <div></div>}
       </div>
     </div>
   ) : (
     <div></div>
   );
+}
+
+function LogList(props) {
+  const docs = props.docs;
+
+  docs.sort(
+    (dailyEntryA, dailyEntryB) =>
+      dailyEntryB.data()["date"] - dailyEntryA.data()["date"]
+  );
+
+  return docs.map((doc) => (
+    <div className="DailyEntry" key={doc.id}>
+      <p>Date: {doc.data()["date"].toDate().toDateString()}</p>
+      <p>Mood: {doc.data()["mood"] ?? 'N/A'}</p>
+      <p>Sleep: {doc.data()["sleep"] ?? 'N/A'} hours</p>
+      <p>Water: {doc.data()["calories"] ?? 'N/A'} cups</p>
+      <p>Calories Burned: {doc.data()["calories"] ?? 'N/A'} cal</p>
+      <p>Steps Taken: {doc.data()["steps"] ?? 'N/A'} steps</p>
+      <p>Exercise: {doc.data()["exercise"] ?? 'N/A'} minutes</p>
+      <p>Fatigue: {doc.data()["fatigue"] != null ? doc.data()["fatigue"] ? 'Yes' : 'No' : 'N/A'}</p>
+      <p>Fever: {doc.data()["fatigue"] != null ? doc.data()["fever"] ? 'Yes' : 'No' : 'N/A'}</p>
+      <p>Cough: {doc.data()["fatigue"] != null ? doc.data()["cough"] ? 'Yes' : 'No' : 'N/A'}</p>
+      <p>Congestion: {doc.data()["fatigue"] != null ? doc.data()["congestion"] ? 'Yes' : 'No' : 'N/A'}</p>
+      <p>Sore Throat: {doc.data()["fatigue"] != null ? doc.data()["sore throat"] ? 'Yes' : 'No' : 'N/A'}</p>
+      <p>Other Ailments: {doc.data()["otherAilments"] ?? 'N/A'}</p>
+    </div>
+  ));
 }
 
 export default App;

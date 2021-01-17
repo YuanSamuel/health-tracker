@@ -66,6 +66,24 @@
   text-align: left;
 }
 
+.Log {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.DailyEntry {
+  background-color: #DDC5E7;
+  min-height: 20vh;
+  min-width: 90vw;
+  max-width: 90vw;
+  margin: auto;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  margin-bottom: 50px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
