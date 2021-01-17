@@ -12,38 +12,38 @@ function App() {
     const userId = new URLSearchParams(window.location.search).get("user");
     if (userId != null) {
       firestore
-      .collection("users")
-      .doc(userId)
-      .get()
-      .then((user) => {
-        if (user.exists) {
-          setUser(user.data());
-          firestore
-            .collection("dailyEntries")
-            .where(
-              firebase.firestore.FieldPath.documentId(),
-              "in",
-              user.data()["dailyEntries"]
-            )
-            .get()
-            .then((dailyEntries) => {
-              setDailyEntries(dailyEntries.docs);
-              firestore
-                .collection("manualEntries")
-                .where(
-                  firebase.firestore.FieldPath.documentId(),
-                  "in",
-                  user.data()["manualEntries"]
-                )
-                .get()
-                .then((manualEntries) => {
-                  setGeneralUpdates(manualEntries.docs);
-                });
-            });
-        } else {
-          console.log("error");
-        }
-      });
+        .collection("users")
+        .doc(userId)
+        .get()
+        .then((user) => {
+          if (user.exists) {
+            setUser(user.data());
+            firestore
+              .collection("dailyEntries")
+              .where(
+                firebase.firestore.FieldPath.documentId(),
+                "in",
+                user.data()["dailyEntries"]
+              )
+              .get()
+              .then((dailyEntries) => {
+                setDailyEntries(dailyEntries.docs);
+                firestore
+                  .collection("manualEntries")
+                  .where(
+                    firebase.firestore.FieldPath.documentId(),
+                    "in",
+                    user.data()["manualEntries"]
+                  )
+                  .get()
+                  .then((manualEntries) => {
+                    setGeneralUpdates(manualEntries.docs);
+                  });
+              });
+          } else {
+            console.log("error");
+          }
+        });
     }
   }, []);
 
@@ -52,15 +52,27 @@ function App() {
       <h1>Health Dashboard</h1>
       <h2>General Info</h2>
       <div className="General-info">
-        <div className="Profile">
-          <h3>{user["name"]}</h3>
-          <h4>
-            {user["gender"]} | {user["age"]} years old
-          </h4>
+        <div className="Profile-info">
+          <div className="Profile">
+            <h3>{user["name"]}</h3>
+            <h4>
+              {user["gender"]} | {user["age"]} years old
+            </h4>
+          </div>
+          <div className="Profile-more">
+            <h4>Height: {user["height"]} cm</h4>
+            <h4>Weight: {user["weight"]} kg</h4>
+          </div>
         </div>
-        <div className="Profile-more">
-          <h4>Height: {user["height"]} cm</h4>
-          <h4>Weight: {user["weight"]} kg</h4>
+        <div align="center">
+          <div className="Medical-conditions">
+            <h4>Medical Conditions: </h4>{" "}
+            <p>
+              {user["medicalConditions"] != null
+                ? user["medicalConditions"].join(", ")
+                : "N/A"}
+            </p>
+          </div>
         </div>
       </div>
       <h2>Symptoms Log</h2>
@@ -155,11 +167,13 @@ function GeneralUpdatesList(props) {
       generalUpdateB.data()["date"] - generalUpdateB.data()["date"]
   );
 
-  return docs.map((doc) => <div className="General-update">
-    <p>Date: {doc.data()["date"].toDate().toDateString()}</p>
-    <p>Height: {doc.data()["height"] ?? "N/A"} cm</p>
-    <p>Weight: {doc.data()["weight"] ?? "N/A"} kg</p>
-  </div>)
+  return docs.map((doc) => (
+    <div className="General-update">
+      <p>Date: {doc.data()["date"].toDate().toDateString()}</p>
+      <p>Height: {doc.data()["height"] ?? "N/A"} cm</p>
+      <p>Weight: {doc.data()["weight"] ?? "N/A"} kg</p>
+    </div>
+  ));
 }
 
 export default App;
