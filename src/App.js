@@ -1,11 +1,10 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
 import { firestore } from "./firebase";
 
 function App() {
   const [user, setUser] = useState();
-  const [dailyEntries, setDailyEntries] = useState();
+  //const [dailyEntries, setDailyEntries] = useState();
 
   useEffect(() => {
     const userId = new URLSearchParams(window.location.search).get("user");
