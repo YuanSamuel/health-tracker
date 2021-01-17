@@ -28,6 +28,44 @@
   color: #61dafb;
 }
 
+.General-info {
+  background-color: #B7DCF4;
+  min-height: 20vh;
+  min-width: 90vw;
+  max-width: 90vw;
+  margin: auto;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.Profile {
+  text-align: left;
+}
+
+.Profile-more {
+  text-align: right;
+}
+
+.Symptoms {
+  background-color: #DDC5E7;
+  min-height: 20vh;
+  min-width: 90vw;
+  max-width: 90vw;
+  margin: auto;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.Symptoms-info {
+  text-align: left;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
