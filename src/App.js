@@ -46,8 +46,8 @@ function App() {
           </h4>
         </div>
         <div className="Profile-more">
-          <h4>Height: {user["height"]} ft</h4>
-          <h4>Weight: {user["weight"]} lbs</h4>
+          <h4>Height: {user["height"]} cm</h4>
+          <h4>Weight: {user["weight"]} kg</h4>
         </div>
       </div>
       <h2>Log</h2>
