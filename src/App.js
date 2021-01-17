@@ -164,7 +164,7 @@ function GeneralUpdatesList(props) {
 
   docs.sort(
     (generalUpdateA, generalUpdateB) =>
-      generalUpdateB.data()["date"] - generalUpdateB.data()["date"]
+      generalUpdateB.data()["date"] - generalUpdateA.data()["date"]
   );
 
   return docs.map((doc) => (
